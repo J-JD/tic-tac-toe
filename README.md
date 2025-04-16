@@ -1,2 +1,2 @@
 # tic-tac-toe
-react tutorial
+Link to [react tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
