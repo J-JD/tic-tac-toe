@@ -1,4 +1,4 @@
-// TODO: Continue on "Taking turns".
+// TODO: Continue on "Adding time travel".
 
 import {useState} from 'react';
 
@@ -19,7 +19,7 @@ export default function Board() {
   const [squares, setSquares] = useState(Array(9).fill(null));
 
   function handleClick(i) {
-    if (squares[i]){
+    if (calculateWinner(squares) || squares[i]){
       return;
     }
 
@@ -35,8 +35,18 @@ export default function Board() {
     setXIsNext(!xIsNext);    
   }
 
+  // Displays which player's turn is next or the winner if the game is over
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = "And the winner is: " + winner + ". THANKS FOR PLAYING!";
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
   return ( 
     <>
+      <div className="status">{status}</div>
       <div className="board-row">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
@@ -54,4 +64,25 @@ export default function Board() {
       </div>
     </>
   );  
+}
+
+function calculateWinner(squares){
+  // Three in a row winning combinations
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  // Checks for the same values at indices. If so, it returns the value (indicating a winner)
+  for (const [a, b, c] of lines){
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null; // Return null if no winner is found.
 }
